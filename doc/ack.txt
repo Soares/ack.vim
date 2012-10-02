@@ -1,70 +1,74 @@
 *ack.txt*   Plugin that integrates ack with Vim
 
 ==============================================================================
-Author:  Antoine Imbert <antoine.imbert+ackvim@gmail.com>         *ack-author*
-License: Same terms as Vim itself (see |license|)
+Author:		Antoine Imbert <antoine.imbert+ackvim@gmail.com>
+		Nate Soares <http://so8r.es>
+*ack-author* License: Same terms as Vim itself (see |license|)
 
 ==============================================================================
-INTRODUCTION                                                             *ack*
+INTRODUCTION
+*ack*
 
-This plugin is a front for the Perl module App::Ack.  Ack can be used as a
-replacement for grep.  This plugin will allow you to run ack from vim, and
+This plugin is a front for the Perl module App::Ack.  Ack can be used as
+a replacement for grep.  This plugin will allow you to run ack from vim, and
 shows the results in a split window.
 
-:Ack[!] [options] {pattern} [{directory}]                               *:Ack*
+:Ack[!] [options] {pattern} [{directory}]
+*:Ack*
 
-    Search recursively in {directory} (which defaults to the current
-    directory) for the {pattern}.  Behaves just like the |:grep| command, but
-    will open the |Quickfix| window for you. If [!] is not given the first
-    error is jumped to.
+	Search recursively in {directory} (which defaults to the current
+	directory) for the {pattern}. Similar to the |:grep| command but will
+	not jump you to the first result unless [!] is given. (This is the
+	opposite of :grep's bang.) If existing, g:ack_qhandler will be executed
+	afterwards. By default this opens the |Quickfix| window, but you can
+	override that behavior.
 
-:AckAdd [options] {pattern} [{directory}]                            *:AckAdd*
+:AckAdd [options] {pattern} [{directory}]
+*:AckAdd*
 
-    Just like |:Ack|, but instead of making a new list, the matches are
-    appended to the current |quickfix| list.
+	Just like |:Ack|, but instead of making a new list, the matches are
+	appended to the current |quickfix| list.
 
-:AckFromSearch [{directory}]                                  *:AckFromSearch*
+:LAck [options] {pattern} [{directory}]
+*:LAck*
 
-    Just like |:Ack| but the pattern is from previous search.
+	Just like |:Ack| but instead of the |quickfix| list, matches are placed
+	in the current |location-list|. g:ack_lhandler is executed afterwards.
 
-:LAck [options] {pattern} [{directory}]                                *:LAck*
+:LAckAdd [options] {pattern} [{directory}]
+*:LAckAdd*
 
-    Just like |:Ack| but instead of the |quickfix| list, matches are placed in
-    the current |location-list|.
+	Just like |:AckAdd| but instead of the |quickfix| list, matches are
+	added to the current |location-list|. g:ack_lhandler is executed
+	afterwards.
 
-:LAckAdd [options] {pattern} [{directory}]                          *:LAckAdd*
+:AckFile [options] {pattern} [{directory}]
+*:AckFile*
 
-    Just like |:AckAdd| but instead of the |quickfix| list, matches are added
-    to the current |location-list|
-
-:AckFile [options] {pattern} [{directory}]                          *:AckFile*
-
-    Search recursively in {directory} (which defaults to the current
-    directory) for filenames matching the {pattern}.  Behaves just like the
-    |:grep| command, but will open the |Quickfix| window for you.
-
-Files containing the search term will be listed in the split window, along
-with the line number of the occurrence, once for each occurrence.  <Enter> on
-a line in this window will open the file, and place the cursor on the matching
-line.
+	Search recursively in {directory} (which defaults to the current
+	directory) for filenames matching the {pattern}. Otherwise behaves just
+	like |:Ack|.
 
 See http://betterthangrep.com/ for more information.
 
 ==============================================================================
-MAPPINGS                                                        *ack-mappings*
+OPTIONS					*ack-options*
 
-The following keyboard shortcuts are available in the quickfix window:
+g:ack_program				*ack-program*
 
-o                   open file (same as enter).
+	The ack program (and options) to use. |grepprg| will be set to this
+	value. Set it to '' to prevent overriding |grepprg|.
+	Default: ack -H --nocolor --nogroup --column
 
-go                  preview file (open but maintain focus on ack.vim results).
+g:ack_qhandler				*ack-qhandler*
 
-t                   open in a new tab.
+	A command to run when results have been placed in the quickfix window.
+	If you use |CtrlP|, |:CtrlPQuickfix| is recommended.
+	Default: |botright| |copen|
 
-T                   open in new tab silently.
+g:ack_qhandler				*ack-qhandler*
 
-v                   open in vertical split.
+	A command to run when results have been placed in the location list.
+	Default: |botright| |lopen|
 
-gv                  open in vertical split silently.
-
-q                   close the quickfix window.
+ vim:ft=help:noet:ts=8:sw=8:sts=8

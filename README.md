@@ -16,9 +16,20 @@ CtrlP). This fork of ack.vim allows you to use that CtrlP navigation (or any
 navigation of your choice) to view the ack results. Consequently, this fork
 removes the half-baked quickfix window bindings of the official plugin.
 
-It also sets your grepprg to ack globally (instead of temporarily while ack is
-running). You can always change it back to grep temporarily if you ever need to
-grep again.
+Furthermore:
+
+- ack.vim sets your grepprg to ack globally. You can always change it back
+  temporarily, but we now assume that you actually want your grepprg to be ack.
+- :Ack & friends do not jump you to the first result. Use :Ack! to get that
+  behavior back.
+- :AckFromSearch has been removed. The conversion of vim to perl regexes was
+  hackish and hobbled.
+- g:ackhighlight has been removed. It doesn't play nice with alternative
+  quickfix searchers such as CtrlPQuickfix.
+- The Rakefile has been removed. It doesn't correctly use XDG_CONFIG_HOME to
+  detect your vim directory. Either copy the files in by hand or use one of the
+  plethora of vim plugin managers.
+
 
 ## Installation ##
 
