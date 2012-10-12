@@ -10,61 +10,53 @@ endif
 let g:loaded_ack = 1
 
 
-if !exists('g:ack_program')
-	let g:ack_program = "ack -H --nocolor --nogroup --column"
+" Whether or not to clobber &grepprg. May also be a string, in which case it
+" will be used as the new grep command.
+if !exists('g:ack_clobber_grep')
+	let g:ack_clobber_grep = 1
 endif
 
-if g:ack_program != ''
-	let &grepprg=g:ack_program
-endif
 
+" What to do when ack finishes dumping results into the quickfix list.
 if !exists('g:ack_qhandler')
 	let g:ack_qhandler = 'botright copen'
 endif
 
+
+" What to do when ack finishes dumping results into the location list.
 if !exists('g:ack_lhandler')
 	let g:ack_lhandler = 'botright lopen'
 endif
 
 
-function! s:AckFile(cmd, bang, args)
-	let l:format_bak = &grepformat
-	let &grepformat = '%f'
-	try
-		call s:Ack(a:cmd, a:bang, '-g', a:args)
-	finally
-		let &grepformat = l:format_bak
-	endtry
-endfunction
+" Whether to use the location list by default.
+if !exists('g:ack_ldefault')
+	let g:ack_ldefault = 0
+endif
 
 
-function! s:Ack(cmd, bang, flags, args)
-	" If no pattern is provided, search for the word under the cursor
-	let l:args = empty(a:args) ? expand('<cword>') : a:args
+" Whether to automatically make key mappings.
+if !exists('g:ack_automap')
+	let g:ack_automap = 0
+endif
 
-	" Jump to the file only if they give the bang.
-	let l:cmd = a:cmd . (a:bang == '!' ? '' : '!')
-	if a:flags != '' |
-		let l:cmd = l:cmd.' '.a:flags
-	endif
-
-	silent execute l:cmd.' '.l:args
-
-	let l:handler = a:cmd =~# '^l' ? g:ack_lhandler : g:ack_qhandler
-	if l:handler != ''
-		exe l:handler
-	endif
-
-	redraw!
-endfunction
 
 command! -bang -nargs=* -complete=file Ack
-		\ call s:Ack('grep', '<bang>', '', <q-args>)
-command! -bang -nargs=* -complete=file AckAdd
-		\ call s:Ack('grepadd', '<bang>', '', <q-args>)
-command! -bang -nargs=* -complete=file LAck
-		\ call s:Ack('lgrep', '<bang>', '', <q-args>)
-command! -bang -nargs=* -complete=file LAckAdd
-		\ call s:Ack('lgrepadd', '<bang>', '', <q-args>)
-command! -bang -nargs=* -complete=file AckFile
-		\ call s:AckFile('grep', '<bang>', <q-args>)
+		\ call ack#ack('<bang>', <q-args>)
+command! -bang -nargs=* -complete=file Ackvanced
+		\ call ack#vanced('<bang>', <q-args>)
+
+
+if type(g:ack_clobber_grep) == type('')
+	let &grepprg = g:ack_clobber_grep
+elseif g:ack_clobber_grep
+	let &grepprg = 'ack -H --nocolor --nogroup --column'
+endif
+
+
+if g:ack_automap
+	noremap <leader>a  :Ack 
+	noremap <leader>Aa :Ackvanced a 
+	noremap <leader>Aw :Ack <C-R><C-W> 
+	noremap <leader>Af :Ackvanced f 
+endif

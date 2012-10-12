@@ -1,74 +1,119 @@
-*ack.txt*   Plugin that integrates ack with Vim
+*ack.txt*   Empower your searches.			*ack* *Ack*
+
+Author:  Nate Soares <http://so8r.es>
+	 Antoine Imbert <antoine.imbert+ackvim@gmail.com>
+License: Same terms as Vim itself (see |license|).
 
 ==============================================================================
-Author:		Antoine Imbert <antoine.imbert+ackvim@gmail.com>
-		Nate Soares <http://so8r.es>
-*ack-author* License: Same terms as Vim itself (see |license|)
+CONTENTS						*ack-contents*
+	1. Introduction...................................|ack-intro|
+	2. Configuration..................................|ack-config|
+	3. Commands.......................................|ack-commands|
+	4. Mappings.......................................|ack-mappings|
+	6. About..........................................|ack-about|
 
-==============================================================================
-INTRODUCTION
-*ack*
+=============================================================================
+INTRODUCTION						*ack-intro*
 
-This plugin is a front for the Perl module App::Ack.  Ack can be used as
-a replacement for grep.  This plugin will allow you to run ack from vim, and
-shows the results in a split window.
+Empower your searches. This plugin helps you:
 
-:Ack[!] [options] {pattern} [{directory}]
-*:Ack*
+* Change the |:grep| command to use 'ack'.
+* Control what happens after you search.
+* Search for files, not just words.
 
+=============================================================================
+CONFIGURATION						*ack-config*
+
+							*g:loaded_ack*
+Use this to disable the plugin entirely: >
+	let g:loaded_ack = 1
+<
+
+							*g:ack_clobber_grep*
+Whether or not to clobber the current |grepprg|.
+This is on by default. If it's a true value, the program >
+	ack -H --nocolor --nogroup --column
+< will be set as your 'grepprg'. If it's a false value, no such clobbering
+will be done. You may also set it to a custom string and we'll happily clobber
+your 'grepprg' with whatever you'd like to use instead.
+
+							*g:ack_qhandler*
+What to do when results are dumped into the |quickfix| window. >
+	botright copen
+< is the default. If you're a |:CtrlP| fan, though, you might want to consider
+'CtrlPQuickfix' instead.
+
+							*g:ack_lhandler*
+What to do when results are dumped into the |location-list|. >
+	botright lopen
+< is the default.
+
+							*g:ack_ldefault*
+Whether to use the |location-list| instead of the |quickfix| window when no
+location is specified. Disabled by default.
+
+							*g:ack_automap*
+Whether or not to turn on the default mappings. No mappings will be made
+unless you set this variable: >
+	let g:ack_automap = 1
+< See |ack-mappings| for the default mappings.
+
+=============================================================================
+COMMANDS						 *ack-commands*
+
+:Ack[!] {pattern} [{directory}]				*:Ack*
 	Search recursively in {directory} (which defaults to the current
 	directory) for the {pattern}. Similar to the |:grep| command but will
 	not jump you to the first result unless [!] is given. (This is the
-	opposite of :grep's bang.) If existing, g:ack_qhandler will be executed
-	afterwards. By default this opens the |Quickfix| window, but you can
-	override that behavior.
+	opposite of :grep's bang.) Executes |g:ack_qhandler| afterwards.
 
-:AckAdd [options] {pattern} [{directory}]
-*:AckAdd*
+:Ackvanced[!] {options} {pattern} [{directory}]		*:Ackvanced*
+	Just like |:Ack|, but takes [options]. [options] is a string
+	containing at least one of the characters 'alfq'.
 
-	Just like |:Ack|, but instead of making a new list, the matches are
-	appended to the current |quickfix| list.
+	a	Results are appended to existing results.
+	l	The location list is used.
+	f	Search for files
+	q	The quickfix window is used.
 
-:LAck [options] {pattern} [{directory}]
-*:LAck*
+	For example >
+		:Ackvanced fal test.c
+<	searches for the file 'test.c' and adds results to the location list
+	without removing existing results there.
 
-	Just like |:Ack| but instead of the |quickfix| list, matches are placed
-	in the current |location-list|. g:ack_lhandler is executed afterwards.
+=============================================================================
+MAPPINGS						*ack-mappings*
 
-:LAckAdd [options] {pattern} [{directory}]
-*:LAckAdd*
+Ack does not change your mappings by default. We recommend you add your own
+mappings depending upon what you search for a lot. Here's some simple
+suggestions: >
+	noremap <leader>a  :Ack ¬
+	noremap <leader>Aa :Ackvanced a ¬
+	noremap <leader>Aw :Ack <C-R><C-W> ¬
+	noremap <leader>Af :Ackvanced f ¬
+<
+NOTE: Notice the '¬' markers above. They should not be included in your
+mapping. They are there to show you that the mapping should have trailing
+whitespace.
 
-	Just like |:AckAdd| but instead of the |quickfix| list, matches are
-	added to the current |location-list|. g:ack_lhandler is executed
-	afterwards.
+If you really like these suggestions you can enable them with |g:ack_automap|.
+You're encouraged to customize your mappings to meet your own needs.
 
-:AckFile [options] {pattern} [{directory}]
-*:AckFile*
+=============================================================================
+ABOUT							*ack-about*
 
-	Search recursively in {directory} (which defaults to the current
-	directory) for filenames matching the {pattern}. Otherwise behaves just
-	like |:Ack|.
+Grab the latest version or report a bug on GitHub:
 
-See http://betterthangrep.com/ for more information.
+http://github.com/Soares/ack.vim
 
-==============================================================================
-OPTIONS					*ack-options*
+This was forked from Antoine Imbert <antoine.imbert+ackvim@gmail.com> and
+suited to my taste. Changes include:
 
-g:ack_program				*ack-program*
+* Combine a plethora of scattered commands into |:Ackvanced|
+* Use vim's autoload functionality to speed up startup time
+* Prevent jumping to the first result easier
+* Give the user more control over what happens once acking finishes
 
-	The ack program (and options) to use. |grepprg| will be set to this
-	value. Set it to '' to prevent overriding |grepprg|.
-	Default: ack -H --nocolor --nogroup --column
-
-g:ack_qhandler				*ack-qhandler*
-
-	A command to run when results have been placed in the quickfix window.
-	If you use |CtrlP|, |:CtrlPQuickfix| is recommended.
-	Default: |botright| |copen|
-
-g:ack_qhandler				*ack-qhandler*
-
-	A command to run when results have been placed in the location list.
-	Default: |botright| |lopen|
+See http://betterthangrep.com/ for more about the ack program.
 
  vim:ft=help:noet:ts=8:sw=8:sts=8
