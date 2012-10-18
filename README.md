@@ -17,8 +17,11 @@ The *Official Version* of this plugin is available at
 - Do not automatically jump the cursor to the first result. (You can get the old
   behavior back with :Ack!.)
 - :AckFromSearch removed. The conversion of vim to perl regexes was incomplete.
+
+#### Minor Differences:
 - g:ackhighlight has been removed. It doesn't play nice with alternative
   quickfix searchers such as CtrlPQuickfix.
+- Move functions into `autoload/` directory to reduce vim start time.
 - The Rakefile has been removed. It doesn't correctly use XDG_CONFIG_HOME to
   detect your vim directory. Either copy the files in by hand or use one of the
   plethora of vim plugin managers.
