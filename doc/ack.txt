@@ -59,15 +59,20 @@ unless you set this variable: >
 < See |ack-mappings| for the default mappings.
 
 =============================================================================
-COMMANDS						 *ack-commands*
+COMMANDS						*ack-commands*
 
-:Ack[!] {pattern} [{directory}]				*:Ack*
+:Ack[!] [options] {pattern} [{directory}]		*:Ack*
 	Search recursively in {directory} (which defaults to the current
 	directory) for the {pattern}. Similar to the |:grep| command but will
 	not jump you to the first result unless [!] is given. (This is the
 	opposite of :grep's bang.) Executes |g:ack_qhandler| afterwards.
 
-:Ackvanced[!] {options} {pattern} [{directory}]		*:Ackvanced*
+	[options] will be passed to Ack. The most common option is likely
+	'--type', as in '--type=python' or '--type=nopython'. See the ack
+	manual for details. Most types can be specified with a short version,
+	such as '--python' or '--nopython'.
+
+:Ackvanced[!] {mode} [options] {pattern} [{directory}]	*:Ackvanced*
 	Just like |:Ack|, but takes [options]. [options] is a string
 	containing at least one of the characters 'alfq'.
 

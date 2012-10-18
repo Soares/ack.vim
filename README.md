@@ -10,70 +10,18 @@ The *Official Version* of this plugin is available at
 
 ## Differences ##
 
-The big feature here is CtrlP integration. CtrlP has a Quickfix mode which lets
-you easily navigate the quickfix list as you do other searches (if you use
-CtrlP). This fork of ack.vim allows you to use that CtrlP navigation (or any
-navigation of your choice) to view the ack results. Consequently, this fork
-removes the half-baked quickfix window bindings of the official plugin.
-
-Furthermore:
-
-- ack.vim sets your grepprg to ack globally. You can always change it back
+- CtrlP Quickfix mode integrated. Quickfix mode bindings were removed, CtrlP
+  & various other plugins do quickfix navigation better and more consistently.
+- Sets your grepprg to ack globally. You can always change it back
   temporarily, but we now assume that you actually want your grepprg to be ack.
-- :Ack & friends do not jump you to the first result. Use :Ack! to get that
-  behavior back.
-- :AckFromSearch has been removed. The conversion of vim to perl regexes was
-  hackish and hobbled.
+- Do not automatically jump the cursor to the first result. (You can get the old
+  behavior back with :Ack!.)
+- :AckFromSearch removed. The conversion of vim to perl regexes was incomplete.
 - g:ackhighlight has been removed. It doesn't play nice with alternative
   quickfix searchers such as CtrlPQuickfix.
 - The Rakefile has been removed. It doesn't correctly use XDG_CONFIG_HOME to
   detect your vim directory. Either copy the files in by hand or use one of the
   plethora of vim plugin managers.
-
-
-## Installation ##
-
-### Ack
-
-You have to install [ack](http://betterthangrep.com/), of course.
-
-Install on Debian / Ubuntu with:
-
-    sudo apt-get install ack-grep
-
-For Debian / Ubuntu you can add this line into your .vimrc:
-
-    let g:ackprg="ack-grep -H --nocolor --nogroup --column"
-
-Install on Gentoo with:
-
-    sudo emerge ack
-
-Install with Homebrew:
-
-    brew install ack
-
-Install with MacPorts:
-
-    sudo port install p5-app-ack
-
-Install with Gentoo Prefix
-
-    emerge ack
-
-Otherwise, you are on your own.
-
-### The Plugin
-
-If you have [Rake](http://rake.rubyforge.org/) installed, you can just run:
-`rake install`.
-
-Otherwise, the file ack.vim goes in ~/.vim/plugin, and the ack.txt file belongs
-in ~/.vim/doc.  Be sure to run
-
-    :helptags ~/.vim/doc
-
-afterwards.
 
 ## Usage ##
 
@@ -82,43 +30,9 @@ afterwards.
 Search recursively in {directory} (which defaults to the current directory) for
 the {pattern}.
 
-Files containing the search term will be listed in the split window, along with
-the line number of the occurrence, once for each occurrence.  [Enter] on a line
-in this window will open the file, and place the cursor on the matching line.
+By default the quickfix window will be opened when searching is done, though you
+can override this with `g:ack_qhandler`. We recommend `:CtrlPQuickfix`, but you
+can use any handler of your choice.
 
-Just like where you use :grep, :grepadd, :lgrep, and :lgrepadd, you can use
-`:Ack`, `:AckAdd`, `:LAck`, and `:LAckAdd` respectively. (See `doc/ack.txt`, or
-install and `:h Ack` for more information.)
-
-**From the [ack docs](http://betterthangrep.com/)** (my favorite feature):
-
-    --type=TYPE, --type=noTYPE
-
-        Specify the types of files to include or exclude from a search. TYPE is
-        a filetype, like perl or xml. --type=perl can also be specified as
-        --perl, and --type=noperl can be done as --noperl.
-
-        If a file is of both type "foo" and "bar", specifying --foo and --nobar
-        will exclude the file, because an exclusion takes precedence over an
-        inclusion.
-
-        Type specifications can be repeated and are ORed together.
-
-        See ack --help=types for a list of valid types.
-
-### Keyboard Shortcuts ###
-
-In the quickfix window, you can use:
-
-    o    to open (same as enter) go   to preview file (open but maintain focus
-    on ack.vim results) t    to open in new tab T    to open in new tab silently
-    v    to open in vertical split gv   to open in vertical split silently
-    q    to close the quickfix window
-
-This Vim plugin is derived (and by derived, I mean copied, essentially) from
-Antoine Imbert's blog post [Ack and Vim
-Integration](http://blog.ant0ine.com/typepad/2007/03/ack-and-vim-integration.html)
-(in particular, the function at the bottom of the post).  I added a help file
-that provides just enough reference to get you going.  I also highly recommend
-you check out the docs for the Perl script 'ack', for obvious reasons: [ack
-- grep-like text finder](http://betterthangrep.com/).
+If you want more options that mirror :grepadd, :lgrep, etc. check out the
+`:Ackvanced` function (`:help :Ackvanced`).
