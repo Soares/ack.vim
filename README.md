@@ -16,7 +16,12 @@ The *Official Version* of this plugin is available at
   temporarily, but we now assume that you actually want your grepprg to be ack.
 - Do not automatically jump the cursor to the first result. (You can get the old
   behavior back with :Ack!.)
-- :AckFromSearch removed. The conversion of vim to perl regexes was incomplete.
+- `:AckFromSearch` removed. The conversion of vim to perl regexes was incomplete.
+  Besides, you can already `:Ack <C-R>/` to ack from search and it's actually
+  less keystrokes than the old command.
+
+(In case you didn't know, `<C-R>` in command mode allows you to paste from
+a register. See `:help c_^R`.)
 
 #### Minor Differences:
 - g:ackhighlight has been removed. It doesn't play nice with alternative
