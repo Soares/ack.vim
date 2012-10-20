@@ -1,9 +1,3 @@
-if exists('g:ack#autoloaded') || &cp || v:version < 700
-	finish
-endif
-let g:ack#autoloaded = 1
-
-
 " Translates a command's [!] into whether the search jumps to the 1st result.
 " @param {string} bang The command's [!] in string form.
 " @return {boolean}
