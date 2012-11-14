@@ -12,10 +12,10 @@ The *Official Version* of this plugin is available at
 
 - CtrlP Quickfix mode integrated. Quickfix mode bindings were removed, CtrlP
   & various other plugins do quickfix navigation better and more consistently.
-- Sets your grepprg to ack globally. You can always change it back
-  temporarily, but we now assume that you actually want your grepprg to be ack.
+- Sets your grepprg to ack globally. You can always change it back.
+  temporarily, but we now assume that you actually want your `grepprg` to be ack.
 - Do not automatically jump the cursor to the first result. (You can get the old
-  behavior back with :Ack!.)
+  behavior back with `:Ack!`.)
 - `:AckFromSearch` removed. The conversion of vim to perl regexes was incomplete.
   Besides, you can already `:Ack <C-R>/` to ack from search and it's actually
   less keystrokes than the old command.
