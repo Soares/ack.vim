@@ -88,9 +88,11 @@ COMMANDS						*ack-commands*
 	w	Ack for word (search string is escaped and surrounded by word
 		boundary markers and put into quotes).
 
-	For example >
-		:Ackvanced fal test.c
-<	searches for the file 'test.c' and adds results to the location list
+	For example:
+>
+		:Ackvanced fla test.c
+<
+	searches for the file 'test.c' and adds results to the location list
 	without removing existing results there.
 
 =============================================================================
@@ -100,15 +102,16 @@ Ack does not change your mappings by default. We recommend you add your own
 mappings depending upon what you search for a lot. Here's some simple
 suggestions:
 >
-	noremap <leader>aa :Ack ¬
-	noremap <leader>ad :Ackvanced a ¬
-	noremap <leader>af :Ackvanced f ¬
-	noremap <leader>ak :Ack<CR>¬
-	noremap <leader>as :Ackvanced w <C-R>/¬
-	noremap <leader>aw :Ackvanced w¬
+	noremap <leader>aa :Ack ¬		" Ack
+	noremap <leader>ad :Ackvanced a ¬	" Ack Add
+	noremap <leader>af :Ackvanced f ¬	" Ack file
+	noremap <leader>ak :Ack<CR>¬		" Ack immediately
+	noremap <leader>as :Ackvanced w <C-R>/¬	" Ack search
+	noremap <leader>aw :Ackvanced w¬	" Ack word
 <
-NOTE: The '¬' markers above should not be included in your mapping. They are
-there to show you that the mapping should have trailing whitespace.
+NOTE: Your mappings should end before the '¬' and should not include the
+comments. The '¬' marker is there to show you that your mappings should
+include trailing whitespace.
 
 If you really like these suggestions you can enable them with
 |g:ack_enable_mappings|.  You're encouraged to customize your mappings to meet
