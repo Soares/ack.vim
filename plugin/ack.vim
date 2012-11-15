@@ -46,7 +46,7 @@ if !empty(g:ack_enable_mappings)
 	endif
 
 	exe 'noremap <leader>'.tolower(s:leader).'k :Ack '
-	exe 'noremap <leader>'.toupper(s:leader).'v :Ackvanced a '
+	exe 'noremap <leader>'.toupper(s:leader).'a :Ackvanced a '
 	exe 'noremap <leader>'.toupper(s:leader).'s :Ack <C-R><C-/>'
 	exe 'noremap <leader>'.toupper(s:leader).'f :Ackvanced f '
 endif

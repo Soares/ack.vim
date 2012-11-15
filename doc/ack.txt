@@ -1,4 +1,4 @@
-*ack.txt*   Empower your searches.			*ack* *Ack*
+*ack.txt*   Empower your searches.			*ack*
 
 Author:  Nate Soares <http://so8r.es>
 	 Antoine Imbert <antoine.imbert+ackvim@gmail.com>
@@ -24,59 +24,64 @@ Empower your searches. This plugin helps you:
 =============================================================================
 CONFIGURATION						*ack-config*
 
-							*g:loaded_ack*
-Use this to disable the plugin entirely: >
-	let g:loaded_ack = 1
-<
-
-							*g:ack_clobber_grep*
+						*g:ack_clobber_grep*
 Whether or not to clobber the current |grepprg|.
-This is on by default. If it's a true value, the program >
+If true, the program
+>
 	ack -H --nocolor --nogroup --column
-< will be set as your 'grepprg'. If it's a false value, no such clobbering
-will be done. You may also set it to a custom string and we'll happily clobber
-your 'grepprg' with whatever you'd like to use instead.
+<
+will be set as your 'grepprg'. If it's false no such clobbering will occur.
+You may set it to a custom string and we'll happily clobber your 'grepprg'
+with whatever other search program you fancy.
+Default: 1
 
-							*g:ack_qhandler*
-What to do when results are dumped into the |quickfix| window. >
-	botright copen
-< is the default. If you're a |:CtrlP| fan, though, you might want to consider
-'CtrlPQuickfix' instead.
+						*g:ack_qhandler*
+What to do when results are dumped into the |quickfix| window.
+If you're a |:CtrlP| fan we suggest
+>
+	let g:ack_qhandler = 'CtrlPQuickfix'
+<
+Default: 'botright copen'
 
-							*g:ack_lhandler*
-What to do when results are dumped into the |location-list|. >
-	botright lopen
-< is the default.
+						*g:ack_lhandler*
+Like |g:ack_qhandler| but for the |location-list|.
+Default: 'botright lopen'
 
-							*g:ack_ldefault*
+						*g:ack_ldefault*
 Whether to use the |location-list| instead of the |quickfix| window when no
-location is specified. Disabled by default.
+location is specified.
+Default: 0
 
-							*g:ack_automap*
-Whether or not to turn on the default mappings. No mappings will be made
-unless you set this variable: >
-	let g:ack_automap = 1
-< See |ack-mappings| for the default mappings.
+						*g:ack_enable_mappings*
+Whether or not to enable the default mappings. See |ack-mappings|.
+This may be set to a letter. If it is, all mappings will be bound under
+<leader><letter>. If set to 1, the letter 'a' will be used.
+Default: 0
 
 =============================================================================
 COMMANDS						*ack-commands*
 
-:Ack[!] [options] {pattern} [{directory}]		*:Ack*
+:Ack[!] [options] [{pattern}] [{directory}]		*:Ack*
 	Search recursively in {directory} (which defaults to the current
-	directory) for the {pattern}. Similar to the |:grep| command but will
-	not jump you to the first result unless [!] is given. (This is the
-	opposite of :grep's bang.) Executes |g:ack_qhandler| afterwards.
+	directory) for the {pattern}. Results are dumped into either the
+	|quickfix| window  or the |location-list|, depending upon your
+	defaults. The appropriate handler is then run.
 
-	[options] will be passed to Ack. The most common option is likely
-	'--type', as in '--type=python' or '--type=nopython'. See the ack
-	manual for details. Most types can be specified with a short version,
-	such as '--python' or '--nopython'.
+	If [!] is present then the first result is jumped to immediately.
 
-:Ackvanced[!] {mode} [options] {pattern} [{directory}]	*:Ackvanced*
-	Just like |:Ack|, but takes [options]. [options] is a string
-	containing at least one of the characters 'alfq'.
+	[options] are passed to Ack. The most common option is '--type', as in
+	'--type=python' or '--type=nopython'. See the ack manual for details.
+	Most types have a short version, i.e. '--python' and '--nopython'.
 
-	a	Results are appended to existing results.
+	If {pattern} is omitted the word under the cursor is searched for
+	(surrounded by word-break characters; searching with your cursor on
+	'foo' will not match 'foobar').
+
+:Ackvanced[!] [mode] [opts] [{pattern}] [{directory}]	*:Ackvanced*
+	Just like |:Ack|, but takes [mode]. [mode] is a string containing at
+	least one of the control characters 'alfq'.
+
+	a	New results are appended to existing results.
 	l	The location list is used.
 	f	Search for files
 	q	The quickfix window is used.
@@ -91,18 +96,19 @@ MAPPINGS						*ack-mappings*
 
 Ack does not change your mappings by default. We recommend you add your own
 mappings depending upon what you search for a lot. Here's some simple
-suggestions: >
-	noremap <leader>a  :Ack ¬
-	noremap <leader>Aa :Ackvanced a ¬
-	noremap <leader>Aw :Ack <C-R><C-W> ¬
-	noremap <leader>Af :Ackvanced f ¬
+suggestions:
+>
+	noremap <leader>ak  :Ack ¬
+	noremap <leader>aa :Ackvanced a ¬
+	noremap <leader>as :Ack <C-R><C-/>¬
+	noremap <leader>af :Ackvanced f ¬
 <
-NOTE: Notice the '¬' markers above. They should not be included in your
-mapping. They are there to show you that the mapping should have trailing
-whitespace.
+NOTE: The '¬' markers above should not be included in your mapping. They are
+there to show you that the mapping should have trailing whitespace.
 
-If you really like these suggestions you can enable them with |g:ack_automap|.
-You're encouraged to customize your mappings to meet your own needs.
+If you really like these suggestions you can enable them with
+|g:ack_enable_mappings|.  You're encouraged to customize your mappings to meet
+your own needs.
 
 =============================================================================
 ABOUT							*ack-about*
@@ -112,12 +118,8 @@ Grab the latest version or report a bug on GitHub:
 http://github.com/Soares/ack.vim
 
 This was forked from Antoine Imbert <antoine.imbert+ackvim@gmail.com> and
-suited to my taste. Changes include:
-
-* Combine a plethora of scattered commands into |:Ackvanced|
-* Use vim's autoload functionality to speed up startup time
-* Prevent jumping to the first result easier
-* Give the user more control over what happens once acking finishes
+changed to suit my tastes. Changes have become substantial enough that this
+should no longer be considered a fork except in spirit.
 
 See http://betterthangrep.com/ for more about the ack program.
 
