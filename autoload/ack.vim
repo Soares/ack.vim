@@ -1,7 +1,8 @@
-" Build a regex for the word under the cursor.
-" @return {string} The (already quoted) string.
-function s:curword()
-	return '"\b' . escape(expand('<cword>'), '"') . '\b"'
+" Build a regex to match the given word.
+" @param {string} word The word to match.
+" @return {string} The matching regex.
+function s:word(word)
+	return '"\b' . escape(a:word, '^$(|){}[].+*?"\') . '\b"'
 endfunction
 
 " Preform a search.
@@ -12,7 +13,7 @@ endfunction
 " @param {boolean} jump Whether to jump to the first result.
 " @param {string} args Args to use with the command.
 function! ack#search(local, add, jump, flags, args)
-	let l:args = empty(a:args) ? s:curword() : a:args
+	let l:args = empty(a:args) ? s:word(expand('<cword>')) : a:args
 	let l:args = empty(a:flags) ? l:args : (a:flags.' '.l:args)
 	let l:prefix = a:local ? 'l' : ''
 	let l:suffix = (a:add ? 'add' : '') . (a:jump ? '' : '!')
@@ -61,6 +62,9 @@ function! ack#vanced(jump, args)
 	let l:local = g:ack_ldefault ?
 			\ match(l:opts, 'q') == -1 :
 			\ match(l:opts, 'l') > -1
+	if match(l:opts, 'w') > -1
+		let l:args = s:word(l:args)
+	endif
 	if l:file
 		call ack#file(l:local, l:add, a:jump, l:args)
 	else

@@ -85,6 +85,8 @@ COMMANDS						*ack-commands*
 	l	The location list is used.
 	f	Search for files
 	q	The quickfix window is used.
+	w	Ack for word (search string is escaped and surrounded by word
+		boundary markers and put into quotes).
 
 	For example >
 		:Ackvanced fal test.c
@@ -98,10 +100,12 @@ Ack does not change your mappings by default. We recommend you add your own
 mappings depending upon what you search for a lot. Here's some simple
 suggestions:
 >
-	noremap <leader>ak  :Ack ¬
-	noremap <leader>aa :Ackvanced a ¬
-	noremap <leader>as :Ack <C-R><C-/>¬
+	noremap <leader>aa :Ack ¬
+	noremap <leader>ad :Ackvanced a ¬
 	noremap <leader>af :Ackvanced f ¬
+	noremap <leader>ak :Ack<CR>¬
+	noremap <leader>as :Ackvanced w <C-R>/¬
+	noremap <leader>aw :Ackvanced w¬
 <
 NOTE: The '¬' markers above should not be included in your mapping. They are
 there to show you that the mapping should have trailing whitespace.

@@ -45,8 +45,10 @@ if !empty(g:ack_enable_mappings)
 		let s:leader = 'a'
 	endif
 
-	exe 'noremap <leader>'.tolower(s:leader).'k :Ack '
-	exe 'noremap <leader>'.toupper(s:leader).'a :Ackvanced a '
-	exe 'noremap <leader>'.toupper(s:leader).'s :Ack <C-R><C-/>'
+	exe 'noremap <leader>'.tolower(s:leader).'a :Ack '
+	exe 'noremap <leader>'.toupper(s:leader).'d :Ackvanced a '
 	exe 'noremap <leader>'.toupper(s:leader).'f :Ackvanced f '
+	exe 'noremap <leader>'.tolower(s:leader).'k :Ack<CR>'
+	exe 'noremap <leader>'.toupper(s:leader).'s :Ackvanced w <C-R>/'
+	exe 'noremap <leader>'.toupper(s:leader).'w :Ackvanced w '
 endif
