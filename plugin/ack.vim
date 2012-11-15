@@ -1,29 +1,28 @@
-if exists('g:loaded_ack') || &cp || v:version < 700
+if exists('g:loaded_ack')
 	finish
 endif
 let g:loaded_ack = 1
 
 
-" g:ack_ack_clobber_grep: Whether or not to clobber &grepprg. May be a string,
-"		in which case it is used as the new grep command.
-" g:ack_qhandler: What to do after ack dumps results in the quickfix list.
-" g:ack_lhandler: What to do after ack dumps results in the location list.
-" g:ack_ldefault: Whether to use the location list by default.
-" g:ack_automap:  Whether or not to define the default ack mappings.
-call hume#0#def('ack', {
-		\ 'clobber_grep': 1,
-		\ 'qhandler': 'botright copen',
-		\ 'lhandler': 'botright lopen',
-		\ 'ldefault': 0,
-		\ 'automap': 0,
-		\ })
+if !exists('g:ack_clobber_grep')
+	let g:ack_clobber_grep = 1
+endif
 
+if !exists('g:ack_qhandler')
+	let g:ack_qhandler = 'botright copen'
+endif
 
-command! -bang -nargs=* -complete=file Ack
-		\ call ack#ack('<bang>', <q-args>)
+if !exists('g:ack_lhandler')
+	let g:ack_lhandler = 'botright lopen'
+endif
 
-command! -bang -nargs=* -complete=file Ackvanced
-		\ call ack#vanced('<bang>', <q-args>)
+if !exists('g:ack_ldefault')
+	let g:ack_ldefault = 0
+endif
+
+if !exists('g:ack_enable_mappings')
+	let g:ack_enable_mappings = 0
+endif
 
 
 if type(g:ack_clobber_grep) == type('')
@@ -33,9 +32,21 @@ elseif g:ack_clobber_grep
 endif
 
 
-if g:ack_automap
-	noremap <leader>a  :Ack 
-	noremap <leader>Aa :Ackvanced a 
-	noremap <leader>Aw :Ack <C-R><C-W> 
-	noremap <leader>Af :Ackvanced f 
+command! -bang -nargs=* -complete=file Ack
+		\ call ack#ack('<bang>', <q-args>)
+command! -bang -nargs=* -complete=file Ackvanced
+		\ call ack#vanced('<bang>', <q-args>)
+
+
+if !empty(g:ack_enable_mappings)
+	if type(g:ack_enable_mappings) == type('')
+		let s:leader = g:ack_enable_mappings
+	else
+		let s:leader = 'a'
+	endif
+
+	exe 'noremap <leader>'.tolower(s:leader).'k :Ack '
+	exe 'noremap <leader>'.toupper(s:leader).'v :Ackvanced a '
+	exe 'noremap <leader>'.toupper(s:leader).'s :Ack <C-R><C-/>'
+	exe 'noremap <leader>'.toupper(s:leader).'f :Ackvanced f '
 endif
