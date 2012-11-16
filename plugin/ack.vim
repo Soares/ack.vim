@@ -20,8 +20,8 @@ if !exists('g:ack_ldefault')
 	let g:ack_ldefault = 0
 endif
 
-if !exists('g:ack_enable_mappings')
-	let g:ack_enable_mappings = 0
+if !exists('g:ack_automap')
+	let g:ack_automap = 0
 endif
 
 
@@ -38,17 +38,15 @@ command! -bang -nargs=* -complete=file Ackvanced
 		\ call ack#vanced('<bang>', <q-args>)
 
 
-if !empty(g:ack_enable_mappings)
-	if type(g:ack_enable_mappings) == type('')
-		let s:leader = g:ack_enable_mappings
-	else
-		let s:leader = 'a'
+if !empty(g:ack_automap)
+	if type(g:ack_automap) == type(1)
+		let g:ack_automap = 'a'
 	endif
 
-	exe 'noremap <leader>'.tolower(s:leader).'a :Ack '
-	exe 'noremap <leader>'.toupper(s:leader).'d :Ackvanced a '
-	exe 'noremap <leader>'.toupper(s:leader).'f :Ackvanced f '
-	exe 'noremap <leader>'.tolower(s:leader).'k :Ack<CR>'
-	exe 'noremap <leader>'.toupper(s:leader).'s :Ackvanced w <C-R>/'
-	exe 'noremap <leader>'.toupper(s:leader).'w :Ackvanced w '
+	exe 'noremap <leader>'.tolower(g:ack_automap).'a :Ack '
+	exe 'noremap <leader>'.toupper(g:ack_aptomap).'d :Ackvanced a '
+	exe 'noremap <leader>'.toupper(g:ack_aptomap).'f :Ackvanced f '
+	exe 'noremap <leader>'.tolower(g:ack_aptomap).'k :Ack<CR>'
+	exe 'noremap <leader>'.toupper(g:ack_aptomap).'s :Ackvanced w <C-R>/'
+	exe 'noremap <leader>'.toupper(g:ack_aptomap).'w :Ackvanced w '
 endif
